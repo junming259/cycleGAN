@@ -14,7 +14,7 @@ more results are coming soon.
 
 |      input ->  output         |       input ->    output      |
 |-------------------------------|-------------------------------|
-![](test_results/results1.jpg)  |  ![](test_results/results2.jpg)
+|![](test_results/results1.jpg) | ![](test_results/results2.jpg)|
 
 
 ## Files structure
@@ -25,10 +25,8 @@ more results are coming soon.
 
 ## Notes:
 * Different size of input requires different structure of model. input[128x128]: 6 blocks; input[256x256]: 9 blocks.
-* Residual block in this paper is a little different than the original one. The small difference is that in original paper the
-author removes the last relu layer in residual block. 
+* Residual block in this paper is a little different than the original one. The small difference is that in original paper the author removes the last relu layer in residual block. 
 * In original paper, the author uses regular batch normalization, however, it is recommended to use instance normalization.
-* Least square loss was used, and then we need to remove the last sigmoid activation function in discriminator. It turns out 
-to perform better and more stable. In Pix2Pix project, sigmoid layer is required for discriminator.
-* Results is sensitive to initialization. Sometimes color of background and object are reversed. You can rerun code to avoid 
-it.
+* Least square loss was used, and then we need to remove the last sigmoid activation function in discriminator. It turns out to perform better and more stable. In Pix2Pix project, sigmoid layer is required for discriminator.
+* Results is sensitive to initialization. Sometimes color of background and object are reversed. You can rerun code to avoid it.
+* Residual block is used to ensure properties of previous input layer are available for layer layers. So outputs will not deviate much from original input.
