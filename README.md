@@ -5,7 +5,7 @@ You can find the original paper on:
 https://junyanz.github.io/CycleGAN/
 
 
-## tensorflow version
+## TensorFlow version
 tensorflow 1.1.0
 
 
