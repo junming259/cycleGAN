@@ -215,10 +215,12 @@ def Rk(inputs, k, with_bn=True, is_train=None, name='Rk'):
 
         with tf.variable_scope('layer1'):
             kernel_shape = [3, 3, inputs.get_shape()[3], k]
-            weights = tf.get_variable('weights', shape=kernel_shape, dtype=tf.float32,
+            weights1 = tf.get_variable('weights', shape=kernel_shape, dtype=tf.float32,
                                         initializer=tf.truncated_normal_initializer(stddev=0.02))
             padded1 = tf.pad(inputs, [[0,0],[1,1],[1,1],[0,0]], 'REFLECT')
-            outs1 = tf.nn.conv2d(padded1, weights, strides=[1,1,1,1], padding='VALID')
+            outs1 = tf.nn.conv2d(padded1, weights1, strides=[1,1,1,1], padding='VALID')
+
+            tf.summary.histogram('weights', weights1)
 
             if with_bn:
                 outs1 = batch_norm(outs1, is_train)
@@ -227,10 +229,13 @@ def Rk(inputs, k, with_bn=True, is_train=None, name='Rk'):
 
         with tf.variable_scope('layer2'):
             kernel_shape = [3, 3, relu1.get_shape()[3], k]
-            weights = tf.get_variable('weights', shape=kernel_shape, dtype=tf.float32,
+            weights2 = tf.get_variable('weights', shape=kernel_shape, dtype=tf.float32,
                                         initializer=tf.truncated_normal_initializer(stddev=0.02))
             padded2 = tf.pad(relu1, [[0,0],[1,1],[1,1],[0,0]], 'REFLECT')
-            outs2 = tf.nn.conv2d(padded2, weights, strides=[1,1,1,1], padding='VALID')
+            outs2 = tf.nn.conv2d(padded2, weights2, strides=[1,1,1,1], padding='VALID')
+
+            tf.summary.histogram('weights', weights2)
+
 
             if with_bn:
                 outs2 = batch_norm(outs2, is_train)
@@ -364,7 +369,9 @@ def discriminator(inputs, is_train, reuse=False, name='discriminator'):
         last_layer = regular_conv(conv4, 1, name='last_layer')
 
         # convert to probability
-        outs = tf.nn.sigmoid(last_layer)
+        # outs = tf.nn.sigmoid(last_layer)
+        # note: if use_lsgan, don't use sigmoid()
+        outs = last_layer
 
     return outs
 
@@ -446,13 +453,14 @@ def discriminator_loss(d_real, d_fake, use_lsgan=True):
 
     if use_lsgan:
         # use mean squared error
-        error_real = tf.reduce_mean(tf.squared_difference(d_real, 1))
+        error_real = tf.reduce_mean(tf.squared_difference(d_real, 0.9))
         error_fake = tf.reduce_mean(tf.square(d_fake))
         loss = (error_real + error_fake)
     else:
         error_real = -tf.reduce_mean(tf.log(d_real + 1e-12))
         error_fake = -tf.reduce_mean(tf.log(1 - d_fake + 1e-12))
         loss = error_real + error_fake
+
     return loss
 
 
@@ -467,10 +475,11 @@ def generator_loss(d_fake, use_lsgan=True):
 
     if use_lsgan:
         # use mean squared error
-        loss = tf.reduce_mean(tf.squared_difference(d_fake, 1))
+        loss = tf.reduce_mean(tf.squared_difference(d_fake, 0.9))
     else:
         # heuristic, non-saturating loss
         loss = -tf.reduce_mean(tf.log(d_fake + 1e-12))
+
     return loss
 
 

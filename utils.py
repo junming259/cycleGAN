@@ -10,6 +10,7 @@ import os
 import numpy as np
 
 from random import shuffle
+from PIL import Image
 
 
 
