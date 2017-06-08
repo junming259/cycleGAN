@@ -9,6 +9,7 @@ from utils import *
 from ops import *
 from datetime import timedelta
 
+import datetime
 import numpy as np
 import tensorflow as tf
 import time
@@ -16,7 +17,25 @@ import time
 
 BATCH_SIZE = 1
 LAMBDA = 10
-OUTPUT_PATH = 'results'
+
+
+
+
+# create a folder to store results
+now = datetime.datetime.now()
+fname = time.strftime('%Y%m%d_%H:%M:%S')
+os.makedirs(fname)
+test_result_path = fname + '/test_results'
+os.makedirs(test_result_path)
+train_result_path = fname + '/train_results'
+os.makedirs(train_result_path)
+model_path = fname + '/model'
+os.makedirs(model_path)
+tensorboard_path = fname + '/TensorBoard'
+os.makedirs(tensorboard_path)
+
+
+
 
 
 
@@ -121,7 +140,7 @@ session.run(tf.global_variables_initializer())
 saver = tf.train.Saver()
 
 # add to tensorboard
-writer = tf.summary.FileWriter('Tensorboard/apple2orange')
+writer = tf.summary.FileWriter(tensorboard_path)
 writer.add_graph(session.graph)
 merge = tf.summary.merge_all()
 
@@ -190,8 +209,17 @@ for i in range(70001):
 
     # save results of testing dataset
     if i%100 == 0:
+
+        # save train results
+        if i%200 == 0:
+            feed_dict = {input_A:d_A, input_B:d_B, is_train:False}
+            gen_A_image, gen_B_image = session.run([gen_A, gen_B], feed_dict=feed_dict)
+            images = np.concatenate((d_A, gen_B_image, d_B, gen_A_image), axis=0)
+            deprocess_and_save_result(images, i, output_path=train_result_path)
+
+        # save test results
         d_A, d_B = Data.get_random_test_batch(BATCH_SIZE)
-        feed_dict = {input_A:d_A, input_B:d_B, is_train:True}
+        feed_dict = {input_A:d_A, input_B:d_B, is_train:False}
 
         t2 = time.time()
         time_dif = t2 - t1
@@ -201,11 +229,11 @@ for i in range(70001):
 
         gen_A_image, gen_B_image = session.run([gen_A, gen_B], feed_dict=feed_dict)
         images = np.concatenate((d_A, gen_B_image, d_B, gen_A_image), axis=0)
-        deprocess_and_save_result(images, i, output_path=OUTPUT_PATH)
+        deprocess_and_save_result(images, i, output_path=test_result_path)
 
     # save model every 10000 iteration
     if i%10000 == 0 and i > 1:
-        path = os.path.join(os.getcwd(), 'model/MODEL.ckpt')
+        path = os.path.join(os.getcwd(), model_path + '/MODEL.ckpt')
         saver.save(session, path, global_step=i)
         print('temporal model saved.')
 

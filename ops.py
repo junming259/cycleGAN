@@ -29,7 +29,6 @@ from random import shuffle
 
 
 # name of folder which will be used to save reuslt images
-OUTPUT_PATH = 'results'
 FILTER_SIZE = 4
 POOL_SIZE = 50
 
@@ -529,7 +528,7 @@ def fake_image_pool(num_fakes, fake, fake_pool):
 
 
 
-def deprocess_and_save_result(batch_res, epoch, grid_shape=(2, 2), grid_pad=5, output_path=OUTPUT_PATH):
+def deprocess_and_save_result(batch_res, epoch, output_path, grid_shape=(2, 2), grid_pad=5):
     '''
     create an output grid to hold the images and save it.
     '''
