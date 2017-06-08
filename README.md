@@ -10,14 +10,20 @@ tensorflow 1.1.0
 
 
 ## Results
-more results are coming soon.
-
+### Test Results
 |      input ->  output                  |       input ->   output                       |
 |----------------------------------------|-----------------------------------------------|
 |          iteration 1000                |                iteration 30000                |
 |  ![](test_results/iteration1000.jpg)   |    ![](test_results/iteration30000.jpg)       | 
 |          iteration 50000               |                iteration 70000                |
 |  ![](test_results/iteration50000.jpg)  |      ![](test_results/iteration70000.jpg)     | 
+
+### Training Results
+|      input ->  output                  |       input ->   output                       |
+|----------------------------------------|-----------------------------------------------|
+|![](train_results/individualImage2.png) |    ![](train_results/individualImage3.png)    | 
+
+
 
 
 ## Files structure
