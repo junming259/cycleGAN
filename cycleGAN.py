@@ -21,6 +21,9 @@ LAMBDA = 10
 
 
 
+
+
+
 # create a folder to store results
 now = datetime.datetime.now()
 fname = time.strftime('%Y%m%d_%H:%M:%S')
@@ -33,10 +36,6 @@ model_path = fname + '/model'
 os.makedirs(model_path)
 tensorboard_path = fname + '/TensorBoard'
 os.makedirs(tensorboard_path)
-
-
-
-
 
 
 # define dataset class
@@ -98,8 +97,8 @@ cycle_loss_B = cycle_consistency_loss(gen_B_from_fake_A, input_B)
 cycle_loss = cycle_loss_A + cycle_loss_B
 
 # define gan loss
-loss_gen_A_1 = generator_loss(dec_A_fake, use_lsgan=False)
-loss_gen_B_1 = generator_loss(dec_B_fake, use_lsgan=False)
+loss_gen_A_1 = generator_loss(dec_A_fake, use_lsgan=True)
+loss_gen_B_1 = generator_loss(dec_B_fake, use_lsgan=True)
 
 
 # define generator loss
@@ -107,8 +106,8 @@ loss_gen_A = loss_gen_A_1 + LAMBDA * cycle_loss
 loss_gen_B = loss_gen_B_1 + LAMBDA * cycle_loss
 
 # define discriminator loss
-loss_dec_A = discriminator_loss(dec_A_real, dec_A_pool_fake, use_lsgan=False)
-loss_dec_B = discriminator_loss(dec_B_real, dec_B_pool_fake, use_lsgan=False)
+loss_dec_A = discriminator_loss(dec_A_real, dec_A_pool_fake, use_lsgan=True)
+loss_dec_B = discriminator_loss(dec_B_real, dec_B_pool_fake, use_lsgan=True)
 
 
 # add summary
