@@ -93,19 +93,11 @@ loss_dec_B = discriminator_loss(dec_B_real, dec_B_pool_fake, use_lsgan=False)
 
 
 # add summary
-tf.summary.scalar('loss_gen_A', loss_gen_A)
-tf.summary.scalar('loss_gen_B', loss_gen_B)
 tf.summary.scalar('loss_dec_A', loss_dec_A)
 tf.summary.scalar('loss_dec_B', loss_dec_B)
-tf.summary.scalar('cycle_loss_A', cycle_loss_A)
-tf.summary.scalar('cycle_loss_B', cycle_loss_B)
 tf.summary.scalar('regular_gan_loss_A', loss_gen_A_1)
 tf.summary.scalar('regular_gan_loss_B', loss_gen_B_1)
-tf.summary.scalar('probability_real_A', tf.reduce_mean(dec_A_real))
-tf.summary.scalar('probability_fake_A', tf.reduce_mean(dec_A_fake))
-tf.summary.scalar('probability_real_B', tf.reduce_mean(dec_B_real))
-tf.summary.scalar('probability_fake_B', tf.reduce_mean(dec_B_fake))
-
+tf.summary.scalar('cycle_loss', cycle_loss)
 
 
 # retrieve variables
@@ -141,7 +133,7 @@ temp_fake_pool_A = None
 temp_fake_pool_B = None
 
 # begin training
-for i in range(100001):
+for i in range(70001):
 
     # decrease learning rate after 50 epoch
     if i < 5e4:
