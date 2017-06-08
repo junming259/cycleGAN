@@ -19,7 +19,7 @@ tensorflow 1.1.0
 |  ![](test_results/iteration50000.jpg)  |      ![](test_results/iteration70000.jpg)     | 
 
 ### Training Results
-|      input ->  output                  |       input ->   output                       |
+|  orange ->  apple ->  reconstruction   |     orange ->   apple  ->   reconstruction    |
 |----------------------------------------|-----------------------------------------------|
 |![](train_results/individualImage2.png) |    ![](train_results/individualImage3.png)    | 
 
