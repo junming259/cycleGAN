@@ -23,7 +23,7 @@ import tensorflow as tf
 import numpy as np
 import os
 
-from skimage.io import imsave
+from PIL import Image
 from random import shuffle
 
 
@@ -562,5 +562,6 @@ def deprocess_and_save_result(batch_res, epoch, output_path, grid_shape=(2, 2), 
 
 
     # save the output image
+    img = Image.fromarray(img_grid)
     fname = "iteration{0}_result.jpg".format(epoch)
-    imsave(os.path.join(output_path, fname), img_grid)
+    img.save(os.path.join(output_path, fname))
